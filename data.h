@@ -1,10 +1,21 @@
 #include <stdint.h>
 
-#define PUP PB0
-#define PDOWN PB1
-#define PLEFT PB2
-#define PRIGHT PB3
-#define PCLK PB4
+typedef enum Pin {
+    PUP=PB0,
+    PDOWN=PB1,
+    PLEFT=PB2,
+    PRIGHT=PB3,
+    PCLK=PB4
+} Pin;
+
+typedef struct BusState {
+    unsigned int read:1;
+    unsigned int write:1;
+    unsigned int rread:1;
+    unsigned int rwrite:1;
+    Pin pin:4;
+    uint8_t data;
+} BusState;
 
 typedef enum Instruction {
     NOP,
