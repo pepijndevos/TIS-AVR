@@ -22,7 +22,7 @@ Did I mention the bi-directional bus?
 The Attiny25 has 5(+reset) output pins, 4 to each neigbor and 1 to the shared clock line.
 Every bus is pulled up with a 10k resistor, and pulled low to write.
 
-Data is written in chunks of 10 bits, 2 negotiation bits and 8 data bist.
+Data is written in chunks of 10 bits, 2 negotiation bits and 8 data bits.
 The first bit is the write bit, the second the read bit.
 By sending a 0 you indicate you want to write.
 Only if two maching 0 are exchanged does a transaction happen.
