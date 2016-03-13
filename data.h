@@ -1,36 +1,45 @@
 #include <stdint.h>
 
-typedef enum Pin {
-    PUP=PB0,
-    PDOWN=PB1,
-    PLEFT=PB2,
-    PRIGHT=PB3,
-    PCLK=PB4
-} Pin;
+typedef enum Port {
+    // Pins
+    UP=PB0,
+    DOWN=PB1,
+    LEFT=PB2,
+    RIGHT=PB3,
+    CLK=PB4,
+    // Registers
+    ACC,
+} Port;
 
 typedef struct BusState {
     unsigned int read:1;
     unsigned int write:1;
     unsigned int rread:1;
     unsigned int rwrite:1;
-    Pin pin:4;
+    Port pin:4;
     uint8_t data;
 } BusState;
 
+// i indicates immediate value
+// r indicates register
 typedef enum Instruction {
     NOP,
-    MOV,
+    MOVi,
+    MOVr,
     SWP,
     SAV,
-    ADD,
-    SUB,
+    ADDi,
+    ADDr,
+    SUBi,
+    SUBr,
     NEG,
     JMP,
     JEZ,
     JNZ,
     JGZ,
     JLZ,
-    JRO,
+    JROi,
+    JROr,
 } Instruction;
 
 typedef struct {

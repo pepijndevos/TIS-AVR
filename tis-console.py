@@ -4,7 +4,8 @@ from time import sleep
 import pdb
 
 clk=8
-io=10
+io1=10
+io2=12
 delay=0.1
 
 GPIO.setmode(GPIO.BOARD)
@@ -14,7 +15,7 @@ WAIT=0
 WRITE=1
 READ=2
 
-def negotiate(goal):
+def negotiate(io, goal):
     rgoal=WAIT
     #pdb.set_trace()
     GPIO.output(clk, GPIO.HIGH)
@@ -39,7 +40,7 @@ def negotiate(goal):
     sleep(delay)
     return rgoal
 
-def transfer(data=None):
+def transfer(io, data=None):
     out=0
     for i in range(8):
         GPIO.output(clk, GPIO.HIGH)
@@ -59,8 +60,13 @@ def transfer(data=None):
     return out
 
 inp = int(input("Number: "))
-print negotiate(WRITE)
-transfer(inp)
+state = WAIT
+while(state != READ):
+    state = negotiate(io1, WRITE)
+    transfer(io1, inp)
 print "done sending"
-print negotiate(READ)
-print transfer()
+while(state != WRITE):
+    state = negotiate(io2, READ)
+    val = transfer(io2)
+    if state == WRITE:
+        print val;
