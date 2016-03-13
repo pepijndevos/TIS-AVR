@@ -12,6 +12,8 @@ The nodes run a simple emulator for the TIS-100 assembly language.
 
 For one thing, it's less secure, less reliable and more 8-bit. There is nothing that stops you from overflowing your numbers or jumping to random memory.
 
+It currently does not loop around, so you have to jump manually.
+
 It's probably also more buggy, and timing might be different around sending/receiving data.
 
 ## Communication protocol
@@ -32,3 +34,7 @@ Similarly, if one node writes a 0 to indicate reading or writing, but the other 
 ## Schematic
 
 ![Schematic](tis-avr.png)
+
+## Future improvements
+
+A convenient way is needed to program the chips. Currently you have to plug an SPI programmer into them one by one. It would be fairly easy to load code from the data bus, but some routing and forwarding needs to be done. The path could be included with the code, and every node strips a section of the path until the path is empty, then it is saved.
