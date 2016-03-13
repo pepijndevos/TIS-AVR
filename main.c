@@ -17,6 +17,7 @@ BusState bus;
 
 uint8_t read_pin(uint8_t pin) {
     DDRB &= ~(_BV(pin));
+    _delay_ms(1); // give the pull-up some time
     return bit_is_set(PINB, pin);
 }
 
@@ -185,10 +186,9 @@ void init(void) {
 
 int main(void) {
   init();
-  bus.pin=0;
   while(1) {
-    transfer();
     execute();
+    transfer();
   }
   return 0;
 }
