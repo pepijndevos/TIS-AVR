@@ -18,7 +18,6 @@ void write_pin(uint8_t pin, uint8_t val) {
 }
 
 void negotiate(void) {
-  DDRB=0; // Set all pins to input
   loop_until_bit_is_set(PINB, PCLK);
   if(bus.write) {
     // Pull line low to indicate desire to write
@@ -50,8 +49,9 @@ void negotiate(void) {
 
 void transfer(void) {
   uint8_t i;
+  negotiate();
   if(bus.read && bus.rwrite) { // We want to read, other side wants to write
-    DDRB=0; // Set all pins to input
+    bus.read=0; // We fulfilled the request
     bus.data=0; // Clear data
     for(i=0;i<8;i++) {
       loop_until_bit_is_set(PINB, PCLK);
@@ -59,6 +59,7 @@ void transfer(void) {
       bus.data |= read_pin(bus.pin) << i;
     }
   } else if(bus.write && bus.rread) { // We want to write, other side wants to read
+    bus.write=0; // We fulfilled the request
     for(i=0;i<8;i++) {
       loop_until_bit_is_set(PINB, PCLK);
       write_pin(bus.pin, _BV(i) & bus.data);
@@ -80,13 +81,16 @@ void init(void) {
 
 int main(void) {
   init();
+  bus.pin=0;
   while(1) {
-    negotiate();
+    bus.read=1;
     transfer();
-    write_pin(PB3, 1);
-    _delay_ms(1000);
-    write_pin(PB3, 0);
-    _delay_ms(1000);
+    //write_pin(PB3, 1);
+    //_delay_ms(100);
+    bus.write=1;
+    transfer();
+    //write_pin(PB3, 0);
+    //_delay_ms(100);
   }
   return 0;
 }
