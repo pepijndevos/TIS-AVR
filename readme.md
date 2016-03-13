@@ -12,7 +12,7 @@ The nodes run a simple emulator for the TIS-100 assembly language.
 
 For one thing, it's less secure, less reliable and more 8-bit. There is nothing that stops you from overflowing your numbers or jumping to random memory.
 
-It currently does not loop around, so you have to jump manually.
+It currently does not loop around, so you have to jump manually. There is no ANY/LAST support.
 
 It's probably also more buggy, and timing might be different around sending/receiving data.
 
