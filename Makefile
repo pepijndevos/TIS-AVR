@@ -11,7 +11,7 @@ OBJECTS    = main.o
 
 # Tune the lines below only if you know what you are doing:
 AVRDUDE = avrdude -c $(PROGRAMMER) -p $(DEVICE)
-COMPILE = avr-gcc -std=gnu11 -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
+COMPILE = avr-gcc -std=gnu11 -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -fshort-enums -fpack-struct
 
 # symbolic targets:
 all:	main.hex

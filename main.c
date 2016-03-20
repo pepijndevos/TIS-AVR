@@ -3,13 +3,45 @@
 
 #include "data.h"
 
-Command program[15] = {
-  {MOVr, UP, ACC},
-  {ADDr, ACC, 0},
-  {MOVr, ACC, DOWN},
-  {JMP, 0, 0}
+Command program[] = {
+  {NOP, 0, 0}, // 0
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0},
+  {NOP, 0, 0}, // 14
+  {JMP, 0, 0},
+  // Bootloader
+  {MOVr, LEFT, ACC}, // 16 recieve destination
+  {JEZ, 25, 0}, // Jump to download if 0
+
+  // Forward code
+  {SUBi, 1, 0}, // 18
+  {MOVr, ACC, RIGHT}, // Destination
+  {MOVi, 45, ACC},
+  {MOVr, LEFT, RIGHT}, // 21 Forward loop
+  {SUBi, 1, 0},
+  {JNZ, 21, 0}, // End loop
+  {JMP, 16, 0}, // Await more code
+
+  // Download code
+  {MOVi, 45, ACC}, // 25
+  {PUSHr, LEFT, 0}, // 26 Download loop
+  {SUBi, 1, 0},
+  {JNZ, 25, 0}, // End loop
+  {JMP, 0, 0}, // Jump to main program
 };
-uint8_t pc=0;
+uint8_t pc=16;
+uint8_t sp=0;
 uint8_t acc;
 uint8_t bak;
 
@@ -173,7 +205,18 @@ void execute(void) {
     case JROi:
       pc+=inst.param1;
       return; // Don't increment pc
-
+    case PUSHr:
+      inst.param1=read_register(inst.param1);
+      // fall through
+    case PUSHi:
+      ((int8_t*)program)[sp]=inst.param1;
+      sp++;
+      break;
+    case POP:
+      sp--;
+      tmp=((int8_t*)program)[sp];
+      write_register(inst.param1, tmp);
+      break;
   }
   pc++;
 }

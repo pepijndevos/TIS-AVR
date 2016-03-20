@@ -10,6 +10,7 @@ probe=16
 delay=0.1
 
 GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
 GPIO.setup(clk, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(probe, GPIO.IN)
 

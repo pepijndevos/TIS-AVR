@@ -40,6 +40,10 @@ typedef enum Instruction {
     JLZ,
     JROi,
     JROr,
+    // Non-standard
+    PUSHi,
+    PUSHr,
+    POP
 } Instruction;
 
 typedef struct {
@@ -47,5 +51,3 @@ typedef struct {
     int8_t param1;
     int8_t param2;
 } Command;
-
-    
